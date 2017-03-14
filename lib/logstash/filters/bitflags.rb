@@ -37,17 +37,18 @@ class LogStash::Filters::Bitflags < LogStash::Filters::Base
   
   public
   def get_flags( event )
-    flags = event[@source]
+    flags = event.get([@source])
     flags = flags.first if flags.is_a? Array
     flags
   end
 
   public
   def apply_flags(flags, event)
-    event[@target] = {}
+    target_dict = {}
     flags.each do |key, value|
-      event[@target][key.to_s] = value
+      target_dict[@target][key.to_s] = value
     end
+    event.set("[@target]", target_dict)
   end
   
   public
